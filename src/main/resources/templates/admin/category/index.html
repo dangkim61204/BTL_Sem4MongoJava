@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<div th:replace="admin/layout/head :: head"></div>
+<body class="hold-transition skin-blue sidebar-mini">
+<div class="wrapper">
+
+    <div th:replace="admin/layout/header :: header"></div>
+    <div th:replace="admin/layout/aside :: aside"></div>
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+    <h1>Category</h1>
+    <div class="col-md">
+        <div class="box">
+            <div class="box-header with-border">
+                <a href="/admin/category/add" class="btn btn-success">Add new category</a>
+                <span style="color: red;" th:text="${mes}"></span>
+            </div>
+
+            <div class="box-body">
+                <table class="table table-bordered" style="text-align: center;">
+                    <thead>
+                    <tr>
+                        <th style="text-align: center;">Name</th>
+<!--                        <th style="text-align: center;">Status</th>-->
+                        <th style="text-align: center;">Action</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="category : ${list.content}">
+                        <td th:text="${category.name}" style="vertical-align: middle;"></td>
+<!--                        <td th:text="${category.status ? 'Hiện' : 'Ẩn'}" style="vertical-align: middle;"></td>-->
+                        <td style="vertical-align: middle;">
+                            <div style="display: flex; justify-content: center;">
+                                <a th:href="@{/admin/category/edit/{id}(id=${category.id})}" class="btn btn-primary">Edit</a>
+                                <a th:href="@{/admin/category/delete/{id}(id=${category.id})}" style="margin-left: 10px"
+                                   onclick="return confirm('Bạn có muốn xoá không?')" class="btn btn-danger">Delete</a>
+                            </div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+
+            </div>
+
+            <!-- Pagination -->
+            <div class="box-footer clearfix">
+                <ul class="pagination pagination-sm no-margin pull-right">
+                    <li th:if="${currentPage > 1}">
+                        <a th:href="@{'/admin/category/list?pageNo=' + ${currentPage - 1}}">&laquo;</a>
+                    </li>
+                    <li th:each="i : ${#numbers.sequence(1, totalPage)}"
+                        th:classappend="${i == currentPage} ? 'status'">
+                        <a th:href="@{'/admin/category/list?pageNo=' + ${i}}" th:text="${i}"></a>
+                    </li>
+                    <li th:if="${currentPage < totalPage}">
+                        <a th:href="@{'/admin/category/list?pageNo=' + ${currentPage + 1}}">&raquo;</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<div th:replace="admin/layout/footer :: footer"></div>
+</div>
+
+<div th:replace="admin/layout/script :: script"></div>
+</body>
+</html>
