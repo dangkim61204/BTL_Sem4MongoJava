@@ -26,21 +26,28 @@ public class SercurityConfig {
     BCryptPasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-
     @Bean
-    SecurityFilterChain securityFilterChain(HttpSecurity http) throws  Exception{
-        http.csrf(csrf->csrf.disable()).authorizeHttpRequests((auth)->auth.
-                requestMatchers("/*").permitAll().
-
-                requestMatchers("/admin/*").hasAnyAuthority("ADMIN").
-                anyRequest().permitAll()
-        ).formLogin(login->login.loginPage("/login").loginProcessingUrl("/login")
-                .usernameParameter("username").passwordParameter("password")
-                .defaultSuccessUrl("/admin", true));
-
+    SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        http.csrf(csrf -> csrf.disable())
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/admin/**").hasAuthority("ADMIN") // CHẶN trước
+                        .anyRequest().permitAll()
+                )
+                .formLogin(login -> login
+                        .loginPage("/login")
+                        .loginProcessingUrl("/login")
+                        .usernameParameter("username")
+                        .passwordParameter("password")
+                        .defaultSuccessUrl("/admin", true)
+                        .failureUrl("/login?error=true") // nếu sai tài khoản
+                        .permitAll()
+                )
+                .logout(logout -> logout
+                        .logoutUrl("/logout")
+                        .logoutSuccessUrl("/login?logout=true")
+                );
 
         return http.build();
-
     }
 
 

@@ -27,21 +27,21 @@
 <body class="hold-transition login-page">
 <div class="login-box">
     <div class="login-logo">
-        <a th:href="@{assets/index2.html}"><b>Admin</b>LTE</a>
+        <a th:href="@{assets/index2.html}"><b>Welcom</b>Please login</a>
+
     </div>
     <!-- /.login-logo -->
     <div class="login-box-body">
         <p class="login-box-msg">Sign in to start your session</p>
-        <p style="color:red;">
-            <span th:text="${error}"></span>
-        </p>
-        <form th:action="@{/login}" method="post">
+  <span style="color: red;" th:text="${msg}"></span>
+        <form th:action="@{/dang-nhap}" method="post">
             <div class="form-group has-feedback">
-                <input type="text" class="form-control" placeholder="Username" name="username">
+                <input type="text" name="username" class="form-control" placeholder="Username" >
                 <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
             </div>
             <div class="form-group has-feedback">
-                <input type="password" class="form-control" placeholder="Password" name="password">
+<!--                <input type="password" name="password"  class="form-control" placeholder="Password" >-->
+                <input type="password" class="form-control" name="password" placeholder="Password">
                 <span class="glyphicon glyphicon-lock form-control-feedback"></span>
             </div>
             <div class="row">
@@ -70,7 +70,7 @@
         <!-- /.social-auth-links -->
 
         <a href="#">I forgot my password</a><br>
-        <a th:href="@{assets/register.html}" class="text-center">Register a new membership</a>
+        <a href="/registerUser" class="text-center">Register a new membership</a>
 
     </div>
     <!-- /.login-box-body -->

@@ -1,0 +1,224 @@
+<div th:replace="layout-user/head :: head"></div>
+<div th:replace="layout-user/header :: header"></div>
+<!--<th:set th:var="total" th:value="${total+carts.price*carts.quantity}" />-->
+<main id="content" role="main" class="cart-page">
+    <!-- breadcrumb -->
+    <div class="bg-gray-13 bg-md-transparent">
+        <div class="container">
+            <!-- breadcrumb -->
+            <div class="my-md-3">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb mb-3 flex-nowrap flex-xl-wrap overflow-auto overflow-xl-visble">
+                        <li class="breadcrumb-item flex-shrink-0 flex-xl-shrink-1"><a href="/home">Home</a></li>
+                        <li class="breadcrumb-item flex-shrink-0 flex-xl-shrink-1 active" aria-current="page">Cart</li>
+                    </ol>
+                </nav>
+            </div>
+            <!-- End breadcrumb -->
+        </div>
+    </div>
+    <!-- End breadcrumb -->
+
+    <div class="container">
+        <div class="mb-4">
+            <h1 class="text-center">Cart</h1>
+        </div>
+        <div class="mb-10 cart-table">
+            <form class="mb-4" action="#" method="post">
+                <table class="table" cellspacing="0">
+                    <thead>
+                    <tr>
+                        <th class="product-remove">&nbsp;</th>
+                        <th class="product-thumbnail">&nbsp;</th>
+                        <th class="product-name">Product</th>
+                        <th class="product-price">Price</th>
+                        <th class="product-quantity w-lg-15">Quantity</th>
+                        <th class="product-subtotal">Total</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+
+
+
+                    <tr class="" th:each="item : ${carts}" >
+
+                        <td class="text-center">
+                            <a href="#" class="text-gray-32 font-size-26" th:attr="onclick='removeItem('+${item.id}+')'">×</a>
+                        </td>
+                        <td class="d-none d-md-table-cell">
+                            <a href="#"><img class="img-fluid max-width-100 p-1 border border-color-1" th:src="@{'/uploads/'+ ${item.image}}" alt="Image Description"></a>
+                        </td>
+
+                        <td data-title="Product">
+                            <a href="#" class="text-gray-90"  th:text="${item.name}"></a>
+                        </td>
+
+                        <td data-title="Price">
+                            <span class="" th:text="${#numbers.formatCurrency(item.price)}"></span>
+                        </td>
+
+                        <td data-title="Quantity">
+                            <span class="sr-only" >Quantity</span>
+                            <!-- Quantity -->
+                            <div class="border rounded-pill py-1 width-122 w-xl-80 px-3 border-color-1">
+                                <div class="js-quantity row align-items-center">
+                                    <div class="col">
+
+                                    </div>
+
+                                    <div class="col-auto pr-1">
+
+                                        <input type="number" name="quantity"    th:attr="onchange='updateCart('+${item.id}+', this.value)'"   class="js-result form-control h-auto border-0 rounded p-0 shadow-none"   th:value="${item.quantity}"  min="1"  max="1000"  >
+                                    </div>
+
+                                </div>
+                            </div>
+                            <!-- End Quantity -->
+                        </td>
+
+                        <td data-title="Total">
+                            <span class=""  th:text="${#numbers.formatCurrency(item.price*item.quantity)}"></span>
+
+                        </td>
+
+                        <td >
+
+                    </tr>
+
+                    </tbody>
+                </table>
+            </form>
+        </div>
+
+
+        <div class="mb-8 cart-total">
+            <div class="row">
+                <div class="col-xl-5 col-lg-6 offset-lg-6 offset-xl-7 col-md-8 offset-md-4">
+                    <div class="border-bottom border-color-1 mb-3">
+                        <h3 class="d-inline-block section-title mb-0 pb-2 font-size-26">Cart totals</h3>
+                    </div>
+                    <table class="table mb-3 mb-md-0">
+                        <tbody>
+                        <tr class="cart-subtotal">
+                            <th>Subtotal</th>
+                            <td data-title="Subtotal"><span class="amount"  th:text="${#numbers.formatCurrency(total)}"> $</span></td>
+                        </tr>
+                        <tr>
+
+                            <td>
+                                <a href="/checkout" class="btn btn-primary">Checkout</a>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <button type="button" class="btn btn-primary-dark-w ml-md-2 px-5 px-md-4 px-lg-5 w-100 w-md-auto d-md-none">Proceed to checkout</button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</main>
+<div th:replace="layout-user/footer :: footer"></div>
+<div th:replace="layout-user/aside :: aside"></div>
+<div th:replace="layout-user/script :: script"></div>
+<script>
+    $(window).on('load', function () {
+        // initialization of HSMegaMenu component
+        $('.js-mega-menu').HSMegaMenu({
+            event: 'hover',
+            direction: 'horizontal',
+            pageContainer: $('.container'),
+            breakpoint: 767.98,
+            hideTimeOut: 0
+        });
+
+        // initialization of svg injector module
+        $.HSCore.components.HSSVGIngector.init('.js-svg-injector');
+    });
+
+    $(document).on('ready', function () {
+        // initialization of header
+        $.HSCore.components.HSHeader.init($('#header'));
+
+        // initialization of animation
+        $.HSCore.components.HSOnScrollAnimation.init('[data-animation]');
+
+        // initialization of unfold component
+        $.HSCore.components.HSUnfold.init($('[data-unfold-target]'), {
+            afterOpen: function () {
+                $(this).find('input[type="search"]').focus();
+            }
+        });
+
+        // initialization of popups
+        $.HSCore.components.HSFancyBox.init('.js-fancybox');
+
+        // initialization of countdowns
+        var countdowns = $.HSCore.components.HSCountdown.init('.js-countdown', {
+            yearsElSelector: '.js-cd-years',
+            monthsElSelector: '.js-cd-months',
+            daysElSelector: '.js-cd-days',
+            hoursElSelector: '.js-cd-hours',
+            minutesElSelector: '.js-cd-minutes',
+            secondsElSelector: '.js-cd-seconds'
+        });
+
+        // initialization of malihu scrollbar
+        $.HSCore.components.HSMalihuScrollBar.init($('.js-scrollbar'));
+
+        // initialization of forms
+        $.HSCore.components.HSFocusState.init();
+
+        // initialization of form validation
+        $.HSCore.components.HSValidation.init('.js-validate', {
+            rules: {
+                confirmPassword: {
+                    equalTo: '#signupPassword'
+                }
+            }
+        });
+
+        // initialization of show animations
+        $.HSCore.components.HSShowAnimation.init('.js-animation-link');
+
+        // initialization of fancybox
+        $.HSCore.components.HSFancyBox.init('.js-fancybox');
+
+        // initialization of slick carousel
+        $.HSCore.components.HSSlickCarousel.init('.js-slick-carousel');
+
+        // initialization of go to
+        $.HSCore.components.HSGoTo.init('.js-go-to');
+
+        // initialization of hamburgers
+        $.HSCore.components.HSHamburgers.init('#hamburgerTrigger');
+
+        // initialization of unfold component
+        $.HSCore.components.HSUnfold.init($('[data-unfold-target]'), {
+            beforeClose: function () {
+                $('#hamburgerTrigger').removeClass('is-active');
+            },
+            afterClose: function() {
+                $('#headerSidebarList .collapse.show').collapse('hide');
+            }
+        });
+
+        $('#headerSidebarList [data-toggle="collapse"]').on('click', function (e) {
+            e.preventDefault();
+
+            var target = $(this).data('target');
+
+            if($(this).attr('aria-expanded') === "true") {
+                $(target).collapse('hide');
+            } else {
+                $(target).collapse('show');
+            }
+        });
+
+        // initialization of unfold component
+        $.HSCore.components.HSUnfold.init($('[data-unfold-target]'));
+
+        // initialization of select picker
+        $.HSCore.components.HSSelectPicker.init('.js-select');
+    });
+</script>
