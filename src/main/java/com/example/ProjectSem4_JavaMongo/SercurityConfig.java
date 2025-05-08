@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
@@ -26,43 +27,68 @@ public class SercurityConfig {
     BCryptPasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-    @Bean
-    SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.csrf(csrf -> csrf.disable())
-                .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/admin/**").hasAuthority("ADMIN") // CHẶN trước
-                        .anyRequest().permitAll()
-                )
-                .formLogin(login -> login
-                        .loginPage("/login")
-                        .loginProcessingUrl("/login")
-                        .usernameParameter("username")
-                        .passwordParameter("password")
-                        .defaultSuccessUrl("/admin", true)
-                        .failureUrl("/login?error=true") // nếu sai tài khoản
-                        .permitAll()
-                )
-                .logout(logout -> logout
-                        .logoutUrl("/logout")
-                        .logoutSuccessUrl("/login?logout=true")
-                );
+        // SecurityFilterChain cho admin (/admin/** và /login)
+        @Bean
+        @Order(1)
+        SecurityFilterChain adminSecurityFilterChain(HttpSecurity http) throws Exception {
+            http
+                    .securityMatcher("/admin/**", "/login")
+                    .csrf(csrf -> csrf.disable())
+                    .authorizeHttpRequests(auth -> auth
+                            .requestMatchers("/admin/**").hasAuthority("ADMIN")
+                            .requestMatchers("/login").permitAll()
+                            .anyRequest().authenticated()
+                    )
+                    .formLogin(login -> login
+                            .loginPage("/login") // Trang đăng nhập cho admin
+                            .loginProcessingUrl("/login") // URL xử lý đăng nhập
+                            .usernameParameter("username")
+                            .passwordParameter("password")
+                            .defaultSuccessUrl("/admin", true) // Chuyển hướng đến /admin sau khi đăng nhập
+                            .failureUrl("/login?error=true") // Đăng nhập thất bại
+                            .permitAll()
+                    )
+                    .logout(logout -> logout
+                            .logoutUrl("/admin/logout")
+                            .logoutSuccessUrl("/login?logout=true")
+                            .permitAll()
+                    );
 
-        return http.build();
-    }
+            return http.build();
+        }
+
+        // SecurityFilterChain cho user (/user/**, /dang-nhap, và các trang công khai)
+        @Bean
+        @Order(2)
+        SecurityFilterChain userSecurityFilterChain(HttpSecurity http) throws Exception {
+            http
+                    .csrf(csrf -> csrf.disable())
+                    .authorizeHttpRequests(auth -> auth
+                            .requestMatchers( "/*").permitAll()
+                            .anyRequest().authenticated()
+                    )
+                    .formLogin(login -> login
+                            .loginPage("/dang-nhap")
+                            .loginProcessingUrl("/dang-nhap")
+                            .usernameParameter("username")
+                            .passwordParameter("password")
+                            .defaultSuccessUrl("/home", true)
+                            .failureUrl("/dang-nhap?error=true")
+                            .permitAll()
+                    )
+                    .logout(logout -> logout
+                            .logoutUrl("/logout")
+                            .logoutSuccessUrl("/dang-nhap?logout=true")
+                            .permitAll()
+                    )
+                    .exceptionHandling(ex -> ex
+                            .accessDeniedPage("/error") // Trang lỗi tùy chỉnh
+                    );
+
+            return http.build();
 
 
-//    @Bean
-//    SecurityFilterChain filterChain(HttpSecurity http) throws  Exception{
-//        System.out.println("11111");
-//        http.csrf(csrf->csrf.disable()).authorizeHttpRequests((auth)->auth.
-//                        requestMatchers("/*").permitAll()).
-//                formLogin(login->login.loginPage("/dang-nhap").loginProcessingUrl("/dang-nhap")
-//                        .usernameParameter("username").passwordParameter("password")
-//                        .defaultSuccessUrl("/home", true));
-//        return http.build();
-//    }
-
-
+        }
 
     @Bean
     WebSecurityCustomizer webSecurityCustomizer() {

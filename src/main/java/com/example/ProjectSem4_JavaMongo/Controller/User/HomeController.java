@@ -20,7 +20,7 @@ public class HomeController {
     @Autowired
     private CategoryService categoryService;
     //trang chủ/home
-    @RequestMapping({"/", "/home"})
+    @RequestMapping( "/home" )
     public String home(Model model, HttpServletRequest req, @Param("key") String key, @RequestParam(name="pageNo",defaultValue = "1") Integer pageNo){
         Page<Product> listview =this.productService.getAll(pageNo);
 //        if(key != null){
