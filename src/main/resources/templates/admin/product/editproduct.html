@@ -60,7 +60,7 @@
                         <div class="form-group">
                             <label >Category</label>
                             <div>
-                                <select class="form-control" id="dropDownList" th:field="*{categoryId}">
+                                <select class="form-control" id="dropDownList" th:field="*{category}">
 
                                 <option th:each="category : ${listCate}" th:value="${category.id}" th:text="${category.name}" ></option>
                                 </select>

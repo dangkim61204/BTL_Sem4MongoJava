@@ -17,25 +17,30 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class HomeController {
     @Autowired
     private ProductService productService;
+
     @Autowired
     private CategoryService categoryService;
-    //trang chủ/home
-    @RequestMapping( "/home" )
-    public String home(Model model, HttpServletRequest req, @Param("key") String key, @RequestParam(name="pageNo",defaultValue = "1") Integer pageNo){
-        Page<Product> listview =this.productService.getAll(pageNo);
-//        if(key != null){
-//            list = this.productService.searchProduct(key, pageNo);
-//            model.addAttribute("key", key);
-//        }
+
+    @GetMapping({"/","/home"})
+    public String home(Model model, HttpServletRequest req, @Param("key") String key,
+                       @RequestParam(name = "pageNo", defaultValue = "1") Integer pageNo) {
+        Page<Product> listview = this.productService.getAll(pageNo);
+
+        if (key != null && !key.isEmpty()) {
+            listview = this.productService.searchProductpage(key, pageNo);
+            model.addAttribute("key", key);
+        }
+
         model.addAttribute("categories", categoryService.getAll());
         model.addAttribute("totalPage", listview.getTotalPages());
         model.addAttribute("currentPage", pageNo);
         model.addAttribute("listview", listview);
 
-//        model.addAttribute("products", productService.getAll());
-
         return "/user/home";
     }
+
+
+
 }
 
 

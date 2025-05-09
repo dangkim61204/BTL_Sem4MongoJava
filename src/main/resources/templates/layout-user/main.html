@@ -203,28 +203,42 @@
               <div class="tab-pane fade pt-2 show active" id="pills-one-example1" role="tabpanel" aria-labelledby="pills-one-example1-tab">
                 <ul class="row list-unstyled products-group no-gutters">
 
-                  <li class="col-6 col-wd-3 col-md-4 product-item" th:each="p:${listview}">
+                  <li class="col-6 col-wd-3 col-md-4 product-item" th:each="p : ${listview}">
                     <div class="product-item__outer h-100">
                       <div class="product-item__inner px-xl-4 p-3">
                         <div class="product-item__body pb-xl-2">
-
-                          <div class="mb-2"><a th:href="@{'/product_detail/' + ${p.productId}}" class="font-size-12 text-gray-5"  th:text="${p.category.categoryName}"></a></div>
-                          <h5 class="mb-1 product-item__title"><a th:href="@{'/product_detail/' + ${p.productId}}"  class="text-blue font-weight-bold" th:text="${p.productName}"></a></h5>
+                          <!-- Kiểm tra category và category.name -->
                           <div class="mb-2">
-                            <a th:href="@{'/product_detail/' + ${p.productId}}" class="d-block text-center"><img class="img-fluid" th:src="@{'/uploads/'+${p.image}}" alt="Image Description"></a>
+                            <a th:href="@{'/product_detail/' + ${p.productId}}"
+                               class="font-size-12 text-gray-5"
+                               th:text="${p.category != null and p.category.name != null} ? ${p.category.name} : 'Không có danh mục'"></a>
+                          </div>
+                          <h5 class="mb-1 product-item__title">
+                            <a th:href="@{'/product_detail/' + ${p.productId}}"
+                               class="text-blue font-weight-bold"
+                               th:text="${p.productName}"></a>
+                          </h5>
+                          <div class="mb-2">
+                            <a th:href="@{'/product_detail/' + ${p.productId}}"
+                               class="d-block text-center">
+                              <img class="img-fluid"
+                                   th:src="@{'/Uploads/' + ${p.image} ?: 'default.jpg'}"
+                                   alt="Image Description">
+                            </a>
                           </div>
                           <div class="flex-center-between mb-1">
                             <div class="prodcut-price">
-                              <div class="text-gray-100" th:text="${#numbers.formatCurrency(p.price)}" ></div>
+                              <div class="text-gray-100"
+                                   th:text="${#numbers.formatCurrency(p.price)}"></div>
                             </div>
                             <div class="d-none d-xl-block prodcut-add-cart">
-                              <a th:href="@{'/product_detail/' + ${p.productId}}" class="btn-add-cart btn-primary transition-3d-hover"><i class="ec ec-add-to-cart" ></i></a>
+                              <a th:href="@{'/product_detail/' + ${p.productId}}"
+                                 class="btn-add-cart btn-primary transition-3d-hover">
+                                <i class="ec ec-add-to-cart"></i>
+                              </a>
                             </div>
                           </div>
-
                         </div>
-
-
                       </div>
                     </div>
                   </li>

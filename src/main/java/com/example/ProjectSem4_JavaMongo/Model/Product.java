@@ -22,7 +22,6 @@ public class Product {
     private double salePrice;
     private String desciption;
 
-    @Field("category_id") // Tên trường trong MongoDB
-    private String categoryId;
-
+    @Field("category_id")
+    private Category category;
 }
