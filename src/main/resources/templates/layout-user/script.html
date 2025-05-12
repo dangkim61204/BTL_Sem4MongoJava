@@ -15,47 +15,123 @@
 
 <script type="text/javascript">
     //Document ready thì show loại sách và số lượng trong giỏ hàng (jquery ajax)
-    $(function() {
+    // $(function() {
+    //
+    //     $.get(endpointUrl + "/countItems", function(data) {
+    //         $('#cart_total').html(data);
+    //         // window.location.reload();
+    //     });
+    // });
+    // $(document).ready(function() {
+    //     $('.add-to-cart').click(function() {
+    //         var id = $(this).data('id');
+    //         $.get(endpointUrl + "/cart-add/" + id, function(data) {
+    //             $('#count').html(data); // Cập nhật số lượng sản phẩm
+    //             window.location.href = '/cart'; // Chuyển hướng sang trang giỏ hàng
+    //         }).fail(function(xhr, status, error) {
+    //             alert('Error adding product to cart: ' + error);
+    //         });
+    //     });
+    // });
 
-        $.get(endpointUrl + "/countItems", function(data) {
-            $('#cart_total').html(data);
-            // window.location.reload();
-        });
-    });
-    //hàm xử lý add 1 sách vào giỏ hàng (jquery ajax)
-    function addCart(id) {
-
-        $.get(endpointUrl + "/cart-add/" + id, function(data) {
-            $('#count').html(data);
-            window.scrollTo({
-                top : 0,
-                behavior : 'smooth'
-            });
-        });
-    }
-
-
-    //hàm xử lý cập nhật lại số lượng trong giỏ hàng (jquery ajax)
 
     //hàm xử lý cập nhật lại số lượng trong giỏ hàng (jquery ajax)
-    function updateCart(id, value) {
-        $.get("/updateCart/" + id + "/" + value, function() {
-            window.location.reload();
-            // document.getElementById('submitForm').submit();
-        });
-    }
+
+    //hàm xử lý cập nhật lại số lượng trong giỏ hàng (jquery ajax)
+    // function updateCart(id, value) {
+    //     $.get("/updateCart/" + id + "/" + value, function() {
+    //         window.location.reload();
+    //         // document.getElementById('submitForm').submit();
+    //     });
+    // }
 
 
 
     //hàm xử lý xóa 1 sp trong giỏ hàng (jquery ajax)
-    function removeItem(id) {
-        if (confirm('Bạn có muốn xóa không?')) {
-            $.get(endpointUrl + "/removeItem/" + id, function() {
-                window.location.reload();
-            });
-        }
-    }
+    // function removeItem(id) {
+    //     if (confirm('Bạn có muốn xóa không?')) {
+    //         $.get(endpointUrl + "/removeItem/" + id, function() {
+    //             window.location.reload();
+    //         });
+    //     }
+    // }
 </script>
+//js xử li gio hang
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+      //them vào gio hang
+        const buttons = document.querySelectorAll('.add-to-cart');
+        buttons.forEach(button => {
+            button.addEventListener('click', function () {
+                const id = this.getAttribute('data-id');
+                const name = this.getAttribute('data-name');
+                const price = this.getAttribute('data-price');
+                const image = this.getAttribute('data-image');
+
+                fetch('/cart/add', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    },
+                    body: new URLSearchParams({ id, name, price, image, quantity: 1 })
+                })
+                    .then(res => {
+                        if (res.ok) return res.text();
+                        if (res.status === 401) window.location.href = "/dang-nhap";
+                        throw new Error("Lỗi thêm vào giỏ hàng");
+                    })
+                    .then(message => {
+                        alert(message);
+                        // Hoặc redirect thủ công nếu muốn:
+                        // window.location.href = "/cart";
+                    })
+                    .catch(err => alert(err));
+            });
+        });
+
+        //xoa sp trong gio hnag
+        document.querySelectorAll('.remove-item').forEach(btn => {
+            btn.addEventListener('click', function (e) {
+                e.preventDefault();
+                const id = this.getAttribute('data-id');
+                fetch(`/cart/remove?id=${id}`, {
+                    method: 'GET'
+                })
+                    .then(res => {
+                        if (res.ok) location.reload();
+                        else alert("Xoá sản phẩm thất bại!");
+                    })
+                    .catch(err => console.error(err));
+            });
+        });
+//tụ update tien khi so luong tăng
+        const quantityInputs = document.querySelectorAll('.quantity-input');
+
+        quantityInputs.forEach(input => {
+            input.addEventListener('change', function () {
+                const id = this.getAttribute('data-id');
+                const quantity = this.value;
+
+                fetch('/cart/update', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    },
+                    body: new URLSearchParams({ id, quantity })
+                })
+                    .then(res => res.json())
+                    .then(data => {
+                        // Cập nhật lại subtotal và tổng tiền
+                        document.querySelector(`.subtotal-${id}`).textContent = data.subtotalFormatted;
+                        document.querySelector(`#cart-total`).textContent = data.totalFormatted;
+                    })
+                    .catch(err => console.error(err));
+            });
+        });
+    });
+</script>
+
+
 
 <script th:src="@{/users-assets/vendor/appear.js}"></script>
 <script th:src="@{/users-assets/vendor/jquery.countdown.min.js}"></script>

@@ -65,7 +65,7 @@ public class SercurityConfig {
                     .authorizeHttpRequests(auth -> auth
                             .requestMatchers(
                                     "/", "/home", "/dang-nhap", "/shop/**", "/product/**",
-                                    "/css/**", "/js/**", "/images/**", "/product_detail/**"
+                                    "/css/**", "/js/**", "/images/**", "/product_detail/**", "/cart/**"
                             ).permitAll()
                             .anyRequest().authenticated()
                     )

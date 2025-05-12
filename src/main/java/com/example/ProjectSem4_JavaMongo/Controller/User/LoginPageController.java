@@ -1,13 +1,17 @@
 package com.example.ProjectSem4_JavaMongo.Controller.User;
 
 import com.example.ProjectSem4_JavaMongo.Model.Account;
+import com.example.ProjectSem4_JavaMongo.Security.AccountDetail;
 import com.example.ProjectSem4_JavaMongo.Service.AccountService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -26,7 +30,7 @@ public class LoginPageController {
     //đăng nhập trang người dùng
     @RequestMapping("/dang-nhap")
     public String dang_nhap(String password, String username, Model model, HttpServletRequest req){
-        System.out.println("dang nhap " + " thong tin passửod cu dang " + password + " mk " + username );
+//        System.out.println("dang nhap " + " thong tin passửod cu dang " + password + " mk " + username );
         Account acc = this.accountService.findByUserName(username);
         if(acc == null ||!passwordEncoder.matches(password, acc.getPassword())) {
             model.addAttribute("msg", "Tài khoản hoặc mật khẩu không chính xác");
@@ -52,5 +56,18 @@ public class LoginPageController {
         HttpSession session = req.getSession();
         session.invalidate();
         return "redirect:/";
+    }
+
+    @ModelAttribute
+    public void addUserNameToModel(Model model) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null && authentication.isAuthenticated() && !(authentication.getPrincipal() instanceof String)) {
+            AccountDetail accountDetail = (AccountDetail) authentication.getPrincipal();
+
+            model.addAttribute("fullname", accountDetail.getAccount().getFullName());
+            model.addAttribute("isLoggedIn", true); // Thêm biến để kiểm tra trạng thái đăng nhập
+        } else {
+            model.addAttribute("isLoggedIn", false); // Người dùng chưa đăng nhập
+        }
     }
 }

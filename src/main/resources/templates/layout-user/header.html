@@ -1,3 +1,4 @@
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <header id="header" class="u-header u-header-left-aligned-nav" th:fragment="header">
     <div class="u-header__section">
         <!-- Topbar -->
@@ -395,24 +396,14 @@
                                                     <ul class="list-inline mb-0">
 
                                                         <li class="list-inline-item mr-0 u-header-topbar__nav-item u-header-topbar__nav-item-border">
-                                                            <div th:if="${session.account_id != null}">
-<!--                                                                <i class="ec ec-user mr-1"></i>-->
-                                                                <h4 style="color: red;">Xin chào, <span th:text="${session.fullname}">!</span></h4>
-
-                                                                <a href="/thoat" class="btn btn-danger">Thoát</a>
-
+                                                            <!-- Nếu đã đăng nhập -->
+                                                            <div sec:authorize="isAuthenticated()">
+                                                                <span class="nav-link">Xin chào, <span th:text="${fullname} ?: 'Guest'"></span></span>
+                                                                <a class="nav-link btn btn-danger text-white" href="/logout">Thoát</a>
                                                             </div>
-
-                                                            <div th:if="${session.account_id == null}">
-                                                                <!-- Account Sidebar Toggle Button -->
-                                                                <a id="sidebarNavToggler" href="/loginUser" role="button" class="u-header-topbar__nav-link"
-                                                                  >
-                                                                    Login and Register <i class="ec ec-user mr-1"></i>
-                                                                </a>
+                                                            <div sec:authorize="isAnonymous()">
+                                                                <a class="nav-link" href="/dang-nhap">Login and Register</a>
                                                             </div>
-                                                            <!--                                    Register <span class="text-gray-50">or</span> Sign in-->
-
-                                                            <!-- End Account Sidebar Toggle Button -->
                                                         </li>
                                                     </ul>
                                                 </div>

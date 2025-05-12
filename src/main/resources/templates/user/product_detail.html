@@ -58,7 +58,7 @@
                             </div>
                         </div>
 
-                        <div class="mb-2" th:utext="${product.desciption}">
+                        <div class="mb-2" th:text="${product.desciption}">
 
                         </div>
 
@@ -89,14 +89,19 @@
                                                 <small class="fas fa-plus btn-icon__inner"></small>
                                             </a>
                                         </div>
-                                    </div>
+                             +-       </div>
                                 </div>
                                 <!-- End Quantity -->
                             </div>
 
-                            <div class="ml-md-3"   th:if="${session.account_id != null}">
-                                <button th:onclick="'addCart(' + ${product.productId} + ')'" class="btn px-5 btn-primary-dark transition-3d-hover"><i class="ec ec-add-to-cart mr-2 font-size-20"></i> Add to Cart</button>
-                            </div>
+                            <button class="btn add-to-cart"
+                                    th:attr="data-id=${product.productId},
+                                             data-name=${product.productName},
+                                             data-price=${product.price},
+                                             data-image=${product.image}">
+                                Add to Cart
+                            </button>
+
                         </div>
                     </div>
                 </div>

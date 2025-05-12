@@ -28,11 +28,14 @@ public class GlobalController {
     public void addUserNameToModel(Model model) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication != null && authentication.isAuthenticated() && !(authentication.getPrincipal() instanceof String)) {
-            AccountDetail fullname = (AccountDetail) authentication.getPrincipal();
-            model.addAttribute("fullname", fullname.getAccount().getFullName());
+            AccountDetail accountDetail = (AccountDetail) authentication.getPrincipal();
+
+            model.addAttribute("fullname", accountDetail.getAccount().getFullName());
+            model.addAttribute("isLoggedIn", true); // Thêm biến để kiểm tra trạng thái đăng nhập
+        } else {
+            model.addAttribute("isLoggedIn", false); // Người dùng chưa đăng nhập
         }
     }
-
 //    @ModelAttribute
 //    public void addCountItem(Model model, HttpServletRequest req) {
 //        List<CartItem> carts = new ArrayList<>();
