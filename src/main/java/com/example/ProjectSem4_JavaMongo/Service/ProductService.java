@@ -22,7 +22,9 @@ public interface ProductService {
     Page<Product> searchProductpage(String key, Integer pageNo);
 
 
-    List<Product> findProductById(String id);
+//    List<Product> findProductById(String id);
+
+    List<Product> findProductById(List<String> ids);
 
     //tim khoang gia
 //    List<Product> findByPriceBetween(Double fromPrice, Double toPrice);

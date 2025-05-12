@@ -70,9 +70,12 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<Product> findProductById(String id) {
-        return productRepository.findCategoryId(id);
+    public List<Product> findProductById(List<String> ids) {
+        return productRepository.findByCategoryIds(ids);
     }
+
+
+
 
     @Override
     public List<Product> searchPriceShopfrom(double priceFrom) {
@@ -86,7 +89,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public List<Product> searchPriceShop(double priceFrom, double priceTo) {
-        return List.of();
+        return productRepository.searchPriceShop(priceFrom, priceTo);
     }
 
     @Override

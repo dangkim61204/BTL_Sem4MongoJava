@@ -13,16 +13,10 @@ public interface ProductRepository extends MongoRepository<Product, String> {
     //tim kiem theo ten ơ admin
     @Query("{ 'productName': { $regex: ?0, $options: 'i' } }")
     List<Product> searchNameProduct(String key);
-//ktra ton tại
-//    boolean findByCategory(String category);
-
-//    //timf kieems nhieu danh muc  theo danh muc trang shop
-//    @Query("{'category_id._id': { $in: ?0 }}")
-//    List<Product> findByCategoryIdIn(List<String> ids);
 
     //timf kieems 1 danh muc  theo danh muc trang shop
     @Query("{'category_id._id': { $in: ?0 }}")
-    List<Product> findCategoryId(String id);
+    List<Product> findByCategoryIds(List<String> ids);
 
     Page<Product> findAll(Pageable pageable);
 

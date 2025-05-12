@@ -60,11 +60,13 @@ public class SercurityConfig {
         // SecurityFilterChain cho user (/user/**, /dang-nhap, và các trang công khai)
         @Bean
         @Order(2)
-        SecurityFilterChain userSecurityFilterChain(HttpSecurity http) throws Exception {
-            http
-                    .csrf(csrf -> csrf.disable())
+        public SecurityFilterChain userSecurityFilterChain(HttpSecurity http) throws Exception {
+            http.csrf(csrf -> csrf.disable())
                     .authorizeHttpRequests(auth -> auth
-                            .requestMatchers( "/*").permitAll()
+                            .requestMatchers(
+                                    "/", "/home", "/dang-nhap", "/shop/**", "/product/**",
+                                    "/css/**", "/js/**", "/images/**", "/product_detail/**"
+                            ).permitAll()
                             .anyRequest().authenticated()
                     )
                     .formLogin(login -> login
@@ -82,13 +84,13 @@ public class SercurityConfig {
                             .permitAll()
                     )
                     .exceptionHandling(ex -> ex
-                            .accessDeniedPage("/error") // Trang lỗi tùy chỉnh
+                            .accessDeniedPage("/error")
                     );
 
             return http.build();
-
-
         }
+
+
 
     @Bean
     WebSecurityCustomizer webSecurityCustomizer() {

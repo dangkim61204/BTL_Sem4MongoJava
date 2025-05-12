@@ -32,33 +32,17 @@
                         <div class="border-bottom pb-4 mb-4">
                             <h4 class="font-size-14 mb-3 font-weight-bold">Brands</h4>
 
-                            <!-- Checkboxes -->
-                            <div class="form-group d-flex align-items-center justify-content-between mb-2 pb-1" th:each="c:${categories}">
+                            <div class="form-group d-flex align-items-center justify-content-between mb-2 pb-1" th:each="c : ${categories}">
                                 <div class="custom-control custom-checkbox">
-
-                                    <input type="checkbox" name="cate" th:value="${c.categoryId}" class="custom-control-input" th:id="'brandAdidas_'+${c.categoryId}"  >
-                                    <label class="custom-control-label" th:for="'brandAdidas_'+${c.categoryId}" th:text="${c.categoryName}">
-                                        <!--                                    <span class="text-gray-25 font-size-12 font-weight-normal"> (56)</span>-->
-                                    </label>
-
+                                    <input type="checkbox" name="cate" th:value="${c.id}" class="custom-control-input" th:id="'brandAdidas_' + ${c.id}">
+                                    <label class="custom-control-label" th:for="'brandAdidas_' + ${c.id}" th:text="${c.name}"></label>
                                 </div>
                             </div>
                         </div>
 
                         <button type="submit" class="btn px-4 btn-primary-dark-w py-2 rounded-lg">Filter</button>
                     </form>
-                    <div>
-                        <h2>Search Price</h2>
-                        <span style="color: red;" th:text="${mes}"></span>
-                        <form method="get" th:action="@{/shop/searchprice}">
-                            <label>From:</label>
-                            <input type="text" name="priceFrom" placeholder="giá từ..." th:value="${priceFrom}">
-                            <br>
-                            <label>To:  </label>
-                            <input type="text" name="priceTo" placeholder="đến..." th:value="${priceTo}">
-                            <button type="submit" class="btn btn-primary">Search giá</button>
-                        </form>
-                    </div>
+
 
                 </div>
                 <div>
@@ -138,13 +122,18 @@
                         <button type="submit" class="btn btn-primary">Search</button>
                     </form>
                 </div>
-<!--                <div>-->
-<!--                    <form method="get" th:action="@{/shop/searchprice}">-->
-<!--                        <input type="text" name="priceFrom" placeholder="giá từ..." th:value="${priceFrom}">-->
-<!--                        <input type="text" name="priceTo" placeholder="đến..." th:value="${priceTo}">-->
-<!--                        <button type="submit" class="btn btn-primary">Search giá</button>-->
-<!--                    </form>-->
-<!--                </div>-->
+                <div>
+                    <h2>Search Price</h2>
+                    <span style="color: red;" th:text="${mes}"></span>
+                    <form method="get" th:action="@{/shop/searchprice}">
+                        <label>From:</label>
+                        <input type="number" name="priceFrom" placeholder="giá từ..." th:value="${priceFrom}">
+                        <br>
+                        <label>To:  </label>
+                        <input type="number" name="priceTo" placeholder="đến..." th:value="${priceTo}">
+                        <button type="submit" class="btn btn-primary">Search giá</button>
+                    </form>
+                </div>
                 <div class="tab-content" id="pills-tabContent">
                     <div class="tab-pane fade pt-2 show active" id="pills-one-example1" role="tabpanel" aria-labelledby="pills-one-example1-tab" data-target-group="groups">
                         <ul class="row list-unstyled products-group no-gutters">
@@ -152,7 +141,7 @@
                                 <div class="product-item__outer h-100">
                                     <div class="product-item__inner px-xl-4 p-3">
                                         <div class="product-item__body pb-xl-2">
-                                            <div class="mb-2"><a href="../shop/product-categories-7-column-full-width.html" class="font-size-12 text-gray-5" th:text="${p.category.categoryName}"></a></div>
+                                            <div class="mb-2"><a href="../shop/product-categories-7-column-full-width.html" class="font-size-12 text-gray-5" th:text="${p.category.name}"></a></div>
                                             <h5 class="mb-1 product-item__title"><a th:href="@{'/product_detail/' + ${p.productId}}" class="text-blue font-weight-bold" th:text="${p.productName}"></a></h5>
                                             <div class="mb-2">
                                                 <a th:href="@{'/product_detail/' + ${p.productId}}" class="d-block text-center"><img class="img-fluid" th:src="@{'/uploads/'+${p.image}}" alt="Image Description"></a>
