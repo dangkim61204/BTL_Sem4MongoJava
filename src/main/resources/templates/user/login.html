@@ -28,7 +28,7 @@
 <div class="login-box">
     <div class="login-logo">
         <a th:href="@{assets/index2.html}"><b>Welcom</b>Please login</a>
-
+        <div th:if="${msgt}" class="alert alert-success" th:text="${msgt}"></div>
     </div>
     <!-- /.login-logo -->
     <div class="login-box-body">
@@ -62,15 +62,10 @@
 
         <div class="social-auth-links text-center">
             <p>- OR -</p>
-            <a href="#" class="btn btn-block btn-social btn-facebook btn-flat"><i class="fa fa-facebook"></i> Sign in using
-                Facebook</a>
-            <a href="/#" class="btn btn-block btn-social btn-google btn-flat"><i class="fa fa-google-plus"></i> Sign in using
-                Google+</a>
-        </div>
-        <!-- /.social-auth-links -->
+            <a href="/registerUser" class="btn btn-block btn-social btn-facebook btn-flat"><i class="fa fa-facebook"></i> sing up </a>
 
-        <a href="#">I forgot my password</a><br>
-        <a href="/registerUser" class="text-center">Register a new membership</a>
+        </div>
+
 
     </div>
     <!-- /.login-box-body -->

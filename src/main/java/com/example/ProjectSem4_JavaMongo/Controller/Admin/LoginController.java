@@ -42,17 +42,14 @@ public class LoginController {
                 return "redirect:/login"; // Redirect về login nếu không có quyền
             }
         }
-
         // Nếu login sai
         if (request.getParameter("error") != null) {
             model.addAttribute("error", "Tài khoản hoặc mật khẩu không đúng.");
         }
-
         // Nếu bị redirect với lý do không đủ quyền
         if (request.getParameter("accessDenied") != null) {
             model.addAttribute("error", "Bạn không có quyền truy cập trang quản trị.");
         }
-
         return "admin/login"; // Trang login
     }
 

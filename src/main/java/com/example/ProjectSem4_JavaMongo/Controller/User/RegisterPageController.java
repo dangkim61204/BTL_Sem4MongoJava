@@ -35,21 +35,15 @@ public class RegisterPageController {
 //        model.addAttribute("account", new Account());
         return "/user/register";
     }
-    //đăng ký trang người dùng
     @RequestMapping("/dang-ky")
-    public String dang_ky(String password, String email, String address, String phone, String username , String fullname, Model model, HttpServletRequest req){
-//        if (bindingResult.hasErrors()) {
-////            model.addAttribute("account", account);
-//            return "/user/register";
-//        }
-//        @Valid  @ModelAttribute("account") Account account, BindingResult bindingResult,
+    public String dang_ky(String password, String email, String address, String phone, String username , String fullname, Model model, HttpServletRequest req) {
         Account acc = this.accountService.findByEmail(email);
         String pass = passwordEncoder.encode(password);
         if(acc != null) {
             model.addAttribute("msg", "Email đã tồn tại");
             return "/user/home";
         }
-        System.out.println("873468734");
+
         Account ac = new Account();
         String uuidString = UUID.randomUUID().toString();
         ac.setAccountId(uuidString.substring(0, 3));
@@ -61,14 +55,17 @@ public class RegisterPageController {
         ac.setPhone(phone);
 
         Account user = accountRepository.save(ac);
+
         AccountRole role = new AccountRole();
         role.setAccount(user);
-        Role role1 = roleRepository.findById("2").get();
+        Role role1 = roleRepository.findById("2").get(); // Role user
         role.setRole(role1);
         accountRoleRepository.save(role);
 
+        model.addAttribute("msgt", "Đăng ký thành công. Vui lòng đăng nhập.");
         return "/user/login";
     }
+
 }
 
 

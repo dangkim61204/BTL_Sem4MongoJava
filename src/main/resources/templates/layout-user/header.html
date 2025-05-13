@@ -398,7 +398,7 @@
                                                         <li class="list-inline-item mr-0 u-header-topbar__nav-item u-header-topbar__nav-item-border">
                                                             <!-- Nếu đã đăng nhập -->
                                                             <div sec:authorize="isAuthenticated()">
-                                                                <span class="nav-link">Xin chào, <span th:text="${fullname} ?: 'Guest'"></span></span>
+                                                                <span class="nav-link">Xin chào, <span th:text="${fullname}"></span></span>
                                                                 <a class="nav-link btn btn-danger text-white" href="/logout">Thoát</a>
                                                             </div>
                                                             <div sec:authorize="isAnonymous()">

@@ -47,7 +47,7 @@
                             <a href="#" class="text-danger font-size-24 remove-item" th:data-id="${item.id}">×</a>
                         </td>
                         <td>
-                            <img class="img-fluid rounded p-1 border" th:src="@{'/Uploads/' + ${item.image}}" alt="Product Image" style="max-width: 100px;">
+                            <img class="img-fluid rounded p-1 border" th:src="@{'/uploads/' + ${item.image}}" alt="Product Image" style="max-width: 100px;">
                         </td>
                         <td th:text="${item.name}">Tên SP</td>
                         <td th:text="${#numbers.formatCurrency(item.price)}">0đ</td>
@@ -69,15 +69,15 @@
                 <div class="d-flex justify-content-between align-items-center mt-4">
                     <h4 class="mb-0">Total: <span id="cart-total" th:text="${#numbers.formatCurrency(total)}"></span></h4>
                     <div>
-                        <a href="/products" class="btn btn-outline-primary mr-2">Continue Shopping</a>
+<!--                        <a href="/products" class="btn btn-outline-primary mr-2">Continue Shopping</a>-->
 
-                        <div th:if="${#authorization.expression('isAuthenticated()')}">
-                            <form th:action="@{/checkout}" method="post" class="d-inline">
-                                <button type="submit" class="btn btn-success">Proceed to Checkout</button>
-                            </form>
-                        </div>
-                        <div th:if="${#authorization.expression('isAnonymous()')}">
-                            <a href="/dang-nhap" class="btn btn-success">Login to Checkout</a>
+                        <div th:if="${not #lists.isEmpty(carts)}">
+                            <div th:if="${#authorization.expression('isAuthenticated()')}">
+                                <a href="/checkout" class="btn btn-success">Proceed to Checkout</a>
+                            </div>
+                            <div th:if="${#authorization.expression('isAnonymous()')}">
+                                <a href="/dang-nhap" class="btn btn-success">Login to Checkout</a>
+                            </div>
                         </div>
                     </div>
                 </div>
