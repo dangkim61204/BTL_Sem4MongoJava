@@ -12,8 +12,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.UUID;
 
@@ -32,30 +34,31 @@ public class RegisterPageController {
 
     @RequestMapping("/registerUser")
     public String registerUser(Model model){
-//        model.addAttribute("account", new Account());
+        model.addAttribute("account", new Account());
         return "/user/register";
     }
-    @RequestMapping("/dang-ky")
-    public String dang_ky(String password, String email, String address, String phone, String username , String fullname, Model model, HttpServletRequest req) {
-        Account acc = this.accountService.findByEmail(email);
-        String pass = passwordEncoder.encode(password);
+    @PostMapping("/registerUser")
+    public String dang_ky(@ModelAttribute("account") Account account, Model model, HttpServletRequest req) {
+//        System.out.println(account.getUserName());
+        Account acc = this.accountService.findByEmail(account.getEmail());
+        String pass = passwordEncoder.encode(account.getPassword());
         if(acc != null) {
             model.addAttribute("msg", "Email đã tồn tại");
             return "/user/home";
         }
+        account.setPassword(pass);
+//        Account ac = new Account();
+////        String uuidString = UUID.randomUUID().toString();
+////        ac.setAccountId(uuidString.substring(0, 3));
+//        ac.setUserName(username);
+//        ac.setFullName(fullname);
+//        ac.setEmail(email);
+//        ac.setAddress(address);
+//        ac.setPassword(pass);
+//        ac.setPhone(phone);
 
-        Account ac = new Account();
-        String uuidString = UUID.randomUUID().toString();
-        ac.setAccountId(uuidString.substring(0, 3));
-        ac.setUserName(username);
-        ac.setFullName(fullname);
-        ac.setEmail(email);
-        ac.setAddress(address);
-        ac.setPassword(pass);
-        ac.setPhone(phone);
-
-        Account user = accountRepository.save(ac);
-
+        Account user = accountRepository.save(account);
+        System.out.println(user);
         AccountRole role = new AccountRole();
         role.setAccount(user);
         Role role1 = roleRepository.findById("2").get(); // Role user

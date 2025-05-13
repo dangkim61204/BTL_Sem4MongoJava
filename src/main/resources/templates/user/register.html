@@ -33,34 +33,34 @@
 
     <div class="register-box-body">
         <p class="login-box-msg">Register a new membership</p>
-        <form th:action="@{/dang-ky}" method="post" >
+        <form th:action="@{/registerUser}" method="post" th:object="${account}">
             <div class="form-group has-feedback">
-                <input type="text" class="form-control" name="username" required="required"    placeholder="User name">
+                <input type="text" class="form-control" name="username" required="required" th:field="*{userName}"    placeholder="User name">
 <!--                <span style="color: red;" th:if="${#fields.hasErrors('userName')}" th:errors="*{userName}">UserName Error</span>-->
                 <span class="glyphicon glyphicon-user form-control-feedback"></span>
             </div>
             <div class="form-group has-feedback">
-                <input type="text" class="form-control" name="fullname" required="required"  placeholder="Full name">
+                <input type="text" class="form-control" name="fullname" required="required" th:field="*{fullName}"  placeholder="Full name">
 <!--                <span style="color: red;" th:if="${#fields.hasErrors('fullName')}" th:errors="*{fullName}">FullName Error</span>-->
                 <span class="glyphicon glyphicon-user form-control-feedback"></span>
             </div>
             <div class="form-group has-feedback">
-                <input type="email" class="form-control" name="email" required="required"  placeholder="Email">
+                <input type="email" class="form-control" name="email" required="required" th:field="*{email}"  placeholder="Email">
 <!--                <span style="color: red;" th:if="${#fields.hasErrors('email')}" th:errors="*{email}">Email Error</span>-->
                 <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
             </div>
                         <div class="form-group has-feedback">
-                            <input type="text" class="form-control" name="phone" required="required"  placeholder="Phone">
+                            <input type="text" class="form-control" name="phone" required="required" th:field="*{phone}"  placeholder="Phone">
 <!--                            <span style="color: red;" th:if="${#fields.hasErrors('phone')}" th:errors="*{phone}">Phone Error</span>-->
                             <span class="glyphicon glyphicon-phone form-control-feedback"></span>
                         </div>
             <div class="form-group has-feedback">
-                <input type="text" class="form-control" name="address" required="required" placeholder="Address">
+                <input type="text" class="form-control" name="address" required="required" th:field="*{address}" placeholder="Address">
 <!--                <span style="color: red;" th:if="${#fields.hasErrors('address')}" th:errors="*{address}">Address Error</span>-->
                 <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
             </div>
             <div class="form-group has-feedback">
-                <input type="password" class="form-control" name="password" placeholder="Password">
+                <input type="password" class="form-control" name="password" th:field="*{password}" placeholder="Password">
 <!--                <span style="color: red;" th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Password Error</span>-->
                 <span class="glyphicon glyphicon-lock form-control-feedback"></span>
             </div>

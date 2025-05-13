@@ -7,7 +7,7 @@ import com.example.ProjectSem4_JavaMongo.Model.CartItem;
 import com.example.ProjectSem4_JavaMongo.Model.Order;
 import com.example.ProjectSem4_JavaMongo.Model.Product;
 import com.example.ProjectSem4_JavaMongo.Security.AccountDetail;
-import com.example.ProjectSem4_JavaMongo.Service.Impl.OrderServiceImpl;
+//import com.example.ProjectSem4_JavaMongo.Service.Impl.OrderServiceImpl;
 import com.example.ProjectSem4_JavaMongo.Service.ProductService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -28,9 +28,9 @@ import java.util.*;
 public class CartController {
     @Autowired
     private ProductService productService;
-
-    @Autowired
-    private OrderServiceImpl orderService;
+//
+//    @Autowired
+//    private OrderServiceImpl orderService;
 
     // Thêm số lượng sản phẩm và tên người dùng vào model
 //    @ModelAttribute
@@ -156,44 +156,44 @@ public class CartController {
     }
 
     // Đặt hàng
-    @PostMapping("/checkout")
-    public String checkout(HttpServletRequest req, Model model) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication == null || !authentication.isAuthenticated() || authentication.getPrincipal() instanceof String) {
-            return "redirect:/dang-nhap?error=login_required";
-        }
-
-        AccountDetail accountDetail = (AccountDetail) authentication.getPrincipal();
-        HttpSession session = req.getSession();
-        List<CartItem> carts = new ArrayList<>();
-        if (session.getAttribute("cart") != null) {
-            carts = (List<CartItem>) session.getAttribute("cart");
-        }
-
-        if (carts.isEmpty()) {
-            model.addAttribute("error", "Cart is empty");
-            return "/user/cart";
-        }
-
-        double total = carts.stream()
-                .mapToDouble(item -> item.getPrice() * item.getQuantity())
-                .sum();
-
-        Order order = new Order();
-        order.setId(UUID.randomUUID().toString());
-        order.setUserId(accountDetail.getAccount().getAccountId()); // Giả định Account có getId()
-        order.setUserName(accountDetail.getAccount().getFullName());
-        order.setItems(carts);
-        order.setTotal(total);
-        order.setCreatedAt(LocalDateTime.now());
-
-        orderService.saveOrder(order);
-
-        // Xóa giỏ hàng
-        session.removeAttribute("cart");
-
-        return "redirect:/order-success";
-    }
+//    @PostMapping("/checkout")
+//    public String checkout(HttpServletRequest req, Model model) {
+//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+//        if (authentication == null || !authentication.isAuthenticated() || authentication.getPrincipal() instanceof String) {
+//            return "redirect:/dang-nhap?error=login_required";
+//        }
+//
+//        AccountDetail accountDetail = (AccountDetail) authentication.getPrincipal();
+//        HttpSession session = req.getSession();
+//        List<CartItem> carts = new ArrayList<>();
+//        if (session.getAttribute("cart") != null) {
+//            carts = (List<CartItem>) session.getAttribute("cart");
+//        }
+//
+//        if (carts.isEmpty()) {
+//            model.addAttribute("error", "Cart is empty");
+//            return "/user/cart";
+//        }
+//
+//        double total = carts.stream()
+//                .mapToDouble(item -> item.getPrice() * item.getQuantity())
+//                .sum();
+//
+//        Order order = new Order();
+//        order.setId(UUID.randomUUID().toString());
+//        order.setUserId(accountDetail.getAccount().getAccountId()); // Giả định Account có getId()
+//        order.setUserName(accountDetail.getAccount().getFullName());
+//        order.setItems(carts);
+//        order.setTotal(total);
+//        order.setCreatedAt(LocalDateTime.now());
+//
+//        orderService.saveOrder(order);
+//
+//        // Xóa giỏ hàng
+//        session.removeAttribute("cart");
+//
+//        return "redirect:/order-success";
+//    }
 
     // Trang xác nhận đặt hàng thành công
     @GetMapping("/order-success")
