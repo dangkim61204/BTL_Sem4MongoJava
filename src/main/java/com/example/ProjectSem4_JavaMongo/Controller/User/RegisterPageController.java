@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Controller
@@ -47,23 +49,30 @@ public class RegisterPageController {
             return "/user/home";
         }
         account.setPassword(pass);
-//        Account ac = new Account();
-////        String uuidString = UUID.randomUUID().toString();
-////        ac.setAccountId(uuidString.substring(0, 3));
-//        ac.setUserName(username);
-//        ac.setFullName(fullname);
-//        ac.setEmail(email);
-//        ac.setAddress(address);
-//        ac.setPassword(pass);
-//        ac.setPhone(phone);
 
-        Account user = accountRepository.save(account);
-        System.out.println(user);
-        AccountRole role = new AccountRole();
-        role.setAccount(user);
-        Role role1 = roleRepository.findById("2").get(); // Role user
-        role.setRole(role1);
-        accountRoleRepository.save(role);
+        // Bước 1: Lưu account mới
+        Account savedAccount = accountRepository.save(account);
+
+        // Bước 2: Lấy role 'USER' có id = "2"
+        Role role = roleRepository.findById("2").orElse(null);
+        if (role == null) {
+            model.addAttribute("msg", "Không tìm thấy quyền USER");
+            return "/user/home";
+        }
+
+        // Bước 3: Tạo accountRole
+        AccountRole accountRole = new AccountRole();
+        accountRole.setAccount(savedAccount);
+        accountRole.setRole(role);
+
+        AccountRole savedAccountRole = accountRoleRepository.save(accountRole);
+
+        // Bước 4: Gán role vào account và role (để đồng bộ 2 chiều nếu cần)
+        savedAccount.getAccountRoles().add(savedAccountRole);
+        accountRepository.save(savedAccount);
+
+        role.getRoleAccounts().add(savedAccountRole);
+        roleRepository.save(role);
 
         model.addAttribute("msgt", "Đăng ký thành công. Vui lòng đăng nhập.");
         return "/user/login";

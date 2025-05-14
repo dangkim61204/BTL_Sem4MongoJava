@@ -29,7 +29,7 @@ public class LoginPageController {
     }
     //đăng nhập trang người dùng
     @RequestMapping("/dang-nhap")
-    public String dang_nhap(String password, String username, Model model, HttpServletRequest req){
+    public String dang_nhap( String password, String username, Model model, HttpServletRequest req){
         Account acc = this.accountService.findByUserName(username);
         if(acc == null ||!passwordEncoder.matches(password, acc.getPassword())) {
             model.addAttribute("msg", "Tài khoản hoặc mật khẩu không chính xác");
@@ -57,16 +57,4 @@ public class LoginPageController {
         return "redirect:/";
     }
 
-//    @ModelAttribute
-//    public void addUserNameToModel(Model model) {
-//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-//        if (authentication != null && authentication.isAuthenticated() && !(authentication.getPrincipal() instanceof String)) {
-//            AccountDetail accountDetail = (AccountDetail) authentication.getPrincipal();
-//
-//            model.addAttribute("fullname", accountDetail.getAccount().getFullName());
-//            model.addAttribute("isLoggedIn", true); // Thêm biến để kiểm tra trạng thái đăng nhập
-//        } else {
-//            model.addAttribute("isLoggedIn", false); // Người dùng chưa đăng nhập
-//        }
-//    }
 }

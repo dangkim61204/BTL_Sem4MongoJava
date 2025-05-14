@@ -20,7 +20,7 @@ public class CheckOutController {
         Account account = (Account) session.getAttribute("account");
         model.addAttribute("account", account);
         model.addAttribute("carts", carts);
-        System.out.println(account);
+        System.out.println(account+ "1111");
         return "/user/checkout";
     }
 }
