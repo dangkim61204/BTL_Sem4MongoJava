@@ -22,18 +22,20 @@ public class LoginPageController {
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
 
-    @RequestMapping("/loginUser")
+    @RequestMapping("/dang-nhap")
     public String logiUser(Model model){
-//        model.addAttribute("account", new Account());
         return "/user/login";
     }
     //đăng nhập trang người dùng
-    @RequestMapping("/dang-nhap")
-    public String dang_nhap( String password, String username, Model model, HttpServletRequest req){
+    @PostMapping("/dang-nhap")
+    public String dang_nhap( String password, String username,Model model, HttpServletRequest req){
+
+        System.out.println("Username nhập: " + username);
         Account acc = this.accountService.findByUserName(username);
-        if(acc == null ||!passwordEncoder.matches(password, acc.getPassword())) {
-            model.addAttribute("msg", "Tài khoản hoặc mật khẩu không chính xác");
-            return "/user/login";
+        System.out.println("Tìm thấy: " + acc);
+        if (acc != null) {
+            System.out.println("Mật khẩu mã hóa: " + acc.getPassword());
+            System.out.println("So khớp: " + passwordEncoder.matches(password, acc.getPassword()));
         }
         HttpSession session = req.getSession();
         session.setMaxInactiveInterval(3600);

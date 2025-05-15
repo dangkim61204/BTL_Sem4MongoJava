@@ -8,6 +8,7 @@ import com.example.ProjectSem4_JavaMongo.Repository.AccountRoleRepository;
 import com.example.ProjectSem4_JavaMongo.Repository.RoleRepository;
 import com.example.ProjectSem4_JavaMongo.Service.AccountService;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -49,6 +50,7 @@ public class RegisterPageController {
             return "/user/home";
         }
         account.setPassword(pass);
+        account.setActive(true);
 
         // Bước 1: Lưu account mới
         Account savedAccount = accountRepository.save(account);
@@ -70,9 +72,11 @@ public class RegisterPageController {
         // Bước 4: Gán role vào account và role (để đồng bộ 2 chiều nếu cần)
         savedAccount.getAccountRoles().add(savedAccountRole);
         accountRepository.save(savedAccount);
-
         role.getRoleAccounts().add(savedAccountRole);
         roleRepository.save(role);
+
+        HttpSession session = req.getSession();
+        session.setAttribute("account", savedAccount);
 
         model.addAttribute("msgt", "Đăng ký thành công. Vui lòng đăng nhập.");
         return "/user/login";

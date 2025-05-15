@@ -33,7 +33,7 @@ public class AccountDetailService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Account account = accountRepository.findByUserName(username);
+        Account account = accountRepository.findAccountByUserName(username);
         if(account == null){
             throw new UsernameNotFoundException("sai");
         }

@@ -120,22 +120,22 @@
             <!-- End Card -->
         </div>
         <!-- End Accordion -->
-        <form class="js-validate" novalidate="novalidate" th:action="@{/order/dat-hang}" method="post">
+        <form class="js-validate" novalidate="novalidate" th:action="@{/order/dat-hang}" th:object="${order}" method="post">
             <div class="row">
+                <!-- Hiển thị thông báo -->
                 <div th:if="${success}" class="alert alert-success" th:text="${success}"></div>
                 <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
+
+                <!-- PHẦN BÊN PHẢI: Danh sách sản phẩm -->
                 <div class="col-lg-8 order-lg-2 mb-7 mb-lg-0">
-                    <div class="pl-lg-3 ">
+                    <div class="pl-lg-3">
                         <div class="bg-gray-1 rounded-lg">
-                            <!-- Order Summary -->
                             <div class="p-4 mb-4 checkout-table">
-                                <!-- Title -->
                                 <div class="border-bottom border-color-1 mb-5">
                                     <h3 class="section-title mb-0 pb-2 font-size-25">Your order</h3>
                                 </div>
-                                <!-- End Title -->
 
-                                <!-- Product Content -->
+                                <!-- Danh sách sản phẩm -->
                                 <table class="table">
                                     <thead>
                                     <tr>
@@ -146,64 +146,61 @@
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <tr class="cart_item"  th:each="item : ${carts}">
-
-                                        <td ><span th:text="${item.name}"></span>  x<strong class="product-quantity" th:text="${item.quantity}"></strong></td>
-                                        <td><img class="img-fluid max-width-60 p-1 border border-color-1"  th:src="@{'/uploads/'+ ${item.image}}"/></td>
-                                        <td th:text="${#numbers.formatCurrency(item.price)}">$</td>
-                                        <td th:text="${#numbers.formatCurrency(item.price*item.quantity)}">$</td>
+                                    <tr class="cart_item" th:each="item : ${carts}">
+                                        <td>
+                                            <span th:text="${item.name}"></span> x
+                                            <strong class="product-quantity" th:text="${item.quantity}"></strong>
+                                        </td>
+                                        <td>
+                                            <img class="img-fluid max-width-60 p-1 border border-color-1"
+                                                 th:src="@{'/uploads/' + ${item.image}}" />
+                                        </td>
+                                        <td th:text="${#numbers.formatCurrency(item.price)}"></td>
+                                        <td th:text="${#numbers.formatCurrency(item.price * item.quantity)}"></td>
                                     </tr>
-
                                     </tbody>
                                     <tfoot>
                                     <tr>
                                         <th>Subtotal</th>
-                                        <td ><span th:text="${#numbers.formatCurrency(total)}"></span></td>
+                                        <td>
+                                            <span th:text="${#numbers.formatCurrency(total)}"></span>
+                                        </td>
                                     </tr>
-
                                     </tfoot>
                                 </table>
-                                <!-- End Product Content -->
-
-                                <div class="form-group d-flex align-items-center justify-content-between px-3 mb-5">
-
-                                </div>
-<!--                                <button type="submit" class="btn btn-primary-dark-w btn-block btn-pill font-size-20 mb-3 py-3">Place order</button>-->
                             </div>
-                            <!-- End Order Summary -->
                         </div>
                     </div>
                 </div>
 
+                <!-- PHẦN BÊN TRÁI: Thông tin khách hàng -->
                 <div class="col-lg-4 order-lg-1">
                     <div class="pb-7 mb-7">
-                        <!-- Title -->
                         <div class="border-bottom border-color-1 mb-5">
                             <h3 class="section-title mb-0 pb-2 font-size-25">Billing details</h3>
                         </div>
-                        <!-- End Title -->
 
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="js-form-message mb-6">
                                     <label class="form-label">FullName <span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control" name="fullname"
-                                            placeholder="FullName" required>
+                                    <input type="text" class="form-control" th:field="*{fullname}"
+                                           placeholder="FullName" required>
                                 </div>
                             </div>
 
                             <div class="col-md-12">
                                 <div class="js-form-message mb-6">
                                     <label class="form-label">Email address <span class="text-danger">*</span></label>
-                                    <input type="email" class="form-control" name="email"
-                                            placeholder="admin@gmail.com" required>
+                                    <input type="email" class="form-control" th:field="*{email}"
+                                           placeholder="admin@gmail.com" required>
                                 </div>
                             </div>
 
                             <div class="col-md-12">
                                 <div class="js-form-message mb-6">
                                     <label class="form-label">Phone</label>
-                                    <input type="text" class="form-control" name="phone"
+                                    <input type="text" class="form-control" th:field="*{phone}"
                                            placeholder="+84 xxx">
                                 </div>
                             </div>
@@ -211,17 +208,21 @@
                             <div class="col-md-12">
                                 <div class="js-form-message mb-6">
                                     <label class="form-label">Street address <span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control" name="address"
-                                            placeholder="address" required>
+                                    <input type="text" class="form-control" th:field="*{address}"
+                                           placeholder="address" required>
                                 </div>
                             </div>
                         </div>
-
                     </div>
                 </div>
             </div>
-            <button type="submit" class="btn btn-primary-dark-w btn-block btn-pill font-size-20 mb-3 py-3">Order</button>
+
+            <!-- Submit button -->
+            <button type="submit" class="btn btn-primary-dark-w btn-block btn-pill font-size-20 mb-3 py-3">
+                Order
+            </button>
         </form>
+
     </div>
 </main>
 <div th:replace="layout-user/footer :: footer"></div>

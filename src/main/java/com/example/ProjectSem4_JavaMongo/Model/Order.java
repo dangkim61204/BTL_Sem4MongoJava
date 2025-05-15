@@ -5,9 +5,12 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Document(collection = "orders")
@@ -18,9 +21,20 @@ import java.util.List;
 public class Order {
     @Id
     private String id;
-    private String userId; // ID của người dùng đặt hàng
-    private String userName; // Tên người dùng
-    private List<CartItem> items; // Danh sách sản phẩm trong đơn hàng
-    private double total; // Tổng giá
-    private LocalDateTime createdAt; // Thời gian tạo
+
+    @DBRef
+    private Account account;
+
+    private String fullname;
+    private String email;
+    private String phone;
+    private String address;
+
+    private Date orderDate;
+    private double totalAmount;
+
+    @DBRef
+    private List<OrderDetail> orderDetails = new ArrayList<>();
+    @DBRef
+    private Account account1; // Giữ nguyên dạng object
 }

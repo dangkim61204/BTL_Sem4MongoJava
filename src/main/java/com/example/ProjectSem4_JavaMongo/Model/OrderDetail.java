@@ -13,12 +13,11 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Getter
 @Setter
 public class OrderDetail {
-
     @Id
     private String id;
-    private String orderId;     // Liên kết với Order.id
-    private String productId;   // Liên kết với Product (nếu cần)
     private String productName;
+    private String image;
+    private double price;
     private int quantity;
-    private float price;
+    private double total;
 }
