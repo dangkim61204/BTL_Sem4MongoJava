@@ -19,41 +19,72 @@
             <div class="box">
                 <!-- /.box-header -->
 
-                <div class="box-body" >
-
+                <div class="box-body">
                     <table class="table table-bordered">
-                        <tr >
-                            <th style="text-align: center;">Code Orders</th>
-                            <th style="text-align: center;">Customer Name</th>
-                            <th style="text-align: center;">Phone</th>
-                            <th style="text-align: center;">Order Date</th>
-
+                        <thead>
+                        <tr style="text-align: center;">
+                            <th>Code Orders</th>
+                            <th>Customer Name</th>
+                            <th>Email</th>
+                            <th>Order Date</th>
+                            <th>Total Amount</th>
+                            <th>Actions</th>
                         </tr>
-                        <tr th:each="od:${list}" style="text-align: center;">
-                            <td th:text="${od.orderId}"></td>
-                            <td th:text="${od.account.fullName}"></td>
-                            <td th:text="${od.phone}"></td>
-                            <td th:text="${od.order_date}"></td>
-
+                        </thead>
+                        <tbody>
+                        <tr th:each="order : ${orderPage.content}" style="text-align: center;">
+                            <td th:text="${order.id}"></td>
+                            <td th:text="${order.fullname}"></td>
+                            <td th:text="${order.email}"></td>
+                            <td th:text="${#dates.format(order.orderDate, 'dd-MM-yyyy HH:mm')}"></td>
+                            <td th:text="${#numbers.formatDecimal(order.totalAmount, 0, 'COMMA', 0, 'POINT')} + ' VNĐ'"></td>
                             <td>
-                                <div style="display: flex;">
-                                  <a th:href="@{/admin/order/orderDetail/{id}(id=${od.orderId})}" class="btn btn-success">Details</a>
-                                    <a th:href="@{/admin/order/delete/{id}(id=${od.orderId})}" style="margin-left: 10px"  onClick="return confirm('Bạn có muốn xoá không?')" class="btn btn-danger">Delete</a>
-                                </div>
+                                <a th:href="@{'/admin/order/detail/' + ${order.id}}" class="btn btn-info btn-sm">Chi tiết</a>
+                                <a th:href="@{'/admin/order/delete/' + ${order.id}}" style="margin-left: 10px"  onClick="return confirm('Bạn có muốn xoá không?')" class="btn btn-danger">Xoá</a>
                             </td>
-
                         </tr>
-
+                        </tbody>
                     </table>
                 </div>
-                <!-- /.box-body -->
-                <div class="box-footer clearfix">
-                    <ul class="pagination pagination-sm no-margin pull-right">
-                        <li th:if="${currentPage > 1}"><a th:href="@{${key != null && key != ''?'?key='+key+'&':'?'}+'pageNo='+${currentPage - 1}}">&laquo;</a></li>
-                        <li th:each="i:${#numbers.sequence(1,totalPage)}" th:classappend="${currentPage==i ? 'active':''}"><a th:href="@{${key != null && key != ''?'?key='+key+'&':'?'}+'pageNo='+${i}}" th:text="${i}"></a></li>
 
-                        <li th:if="${currentPage < totalPage}"><a th:href="@{${key != null && key != ''?'?key='+key+'&':'?'}+'pageNo='+${currentPage + 1}}">&raquo;</a></li>
-                    </ul>
+                <!-- PHÂN TRANG -->
+                <div class="text-center mt-3" style="margin-top: 20px; text-align: center;">
+                    <nav aria-label="Page navigation">
+                        <ul class="pagination">
+                            <!-- Nút "Trang trước" -->
+                            <li th:classappend="${currentPage == 0} ? 'disabled'">
+                                <a th:href="@{'/admin/order/list?page=' + ${currentPage - 1}}" aria-label="Previous">
+                                    <span aria-hidden="true">&laquo;</span>
+                                </a>
+                            </li>
+
+                            <!-- Danh sách trang -->
+                            <li th:each="i : ${#numbers.sequence(0, totalPages - 1)}"
+                                th:classappend="${i == currentPage} ? 'active'">
+                                <a th:href="@{'/admin/order/list?page=' + ${i}}"
+                                   th:text="${i + 1}">1</a>
+                            </li>
+
+                            <!-- Nút "Trang sau" -->
+                            <li th:classappend="${currentPage + 1 >= totalPages} ? 'disabled'">
+                                <a th:href="@{'/admin/order/list?page=' + ${currentPage + 1}}" aria-label="Next">
+                                    <span aria-hidden="true">&raquo;</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+                <!-- /.box-body -->
+                <div>
+                    <span th:if="${currentPage > 0}">
+                        <a th:href="@{'/admin/order/list?page=' + ${currentPage - 1}}">← Trang trước</a>
+                    </span>
+
+                    <span>Trang <span th:text="${currentPage + 1}"></span> / <span th:text="${totalPages}"></span></span>
+
+                    <span th:if="${currentPage + 1 < totalPages}">
+                        <a th:href="@{'/admin/order/list?page=' + ${currentPage + 1}}">Trang tiếp →</a>
+                    </span>
                 </div>
             </div>
             <!-- /.box -->

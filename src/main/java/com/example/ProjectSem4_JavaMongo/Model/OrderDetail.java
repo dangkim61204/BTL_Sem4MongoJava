@@ -15,8 +15,10 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class OrderDetail {
     @Id
     private String id;
+    private String orderId;
     private String productName;
     private String image;
+    private String description;
     private double price;
     private int quantity;
     private double total;

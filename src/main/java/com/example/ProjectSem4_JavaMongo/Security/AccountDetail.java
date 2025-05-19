@@ -20,6 +20,15 @@ public class AccountDetail implements UserDetails {
     private Account account;
     private Collection<? extends GrantedAuthority> authorities;
 
+    public AccountDetail(Account account) {
+        this.account = account;
+    }
+
+    public Account getAccount() {
+        return account;
+    }
+
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return authorities;

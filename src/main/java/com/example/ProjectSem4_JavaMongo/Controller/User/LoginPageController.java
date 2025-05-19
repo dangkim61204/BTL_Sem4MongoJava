@@ -31,36 +31,33 @@ public class LoginPageController {
     public String loginUser(HttpServletRequest request, Model model) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-        // Nếu đã đăng nhập thì chuyển hướng theo vai trò
+        // Nếu đã đăng nhập
         if (!(authentication instanceof AnonymousAuthenticationToken)) {
-            String username = authentication.getName();
             Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
 
-            boolean isUser = authorities.stream().anyMatch(auth -> auth.getAuthority().equals("USER"));
-            boolean isAdmin = authorities.stream().anyMatch(auth -> auth.getAuthority().equals("ADMIN"));
+            boolean isUser = authorities.stream()
+                    .anyMatch(auth -> auth.getAuthority().equals("USER"));
+            boolean isAdmin = authorities.stream()
+                    .anyMatch(auth -> auth.getAuthority().equals("ADMIN"));
 
-            if (isAdmin) {
-                return "redirect:/admin/index";
-            } else if (isUser) {
-                return "redirect:/user/home";
-            }
+//            if (isUser) {
+//                return "redirect:/user/home"; // Chuyển đến trang user
+//            } else if (isAdmin) {
+//                model.addAttribute("error", "Tài khoản Admin không được phép đăng nhập tại đây.");
+//                return "user/login"; // Quay lại login user kèm thông báo
+//            }
         }
 
-        // Nếu login sai
+        // Lỗi đăng nhập
         if (request.getParameter("error") != null) {
             model.addAttribute("error", "Tài khoản hoặc mật khẩu không đúng.");
         }
 
-        // Nếu logout
-        if (request.getParameter("logout") != null) {
-            model.addAttribute("msg", "Bạn đã đăng xuất thành công.");
-        }
-
-        // Nếu bị từ chối truy cập
+        // Không đủ quyền truy cập
         if (request.getParameter("accessDenied") != null) {
-            model.addAttribute("error", "Bạn không có quyền truy cập.");
+            model.addAttribute("error", "Bạn không có quyền truy cập trang này.");
         }
 
-        return "user/login";
+        return "user/login"; // Trang login user
     }
 }

@@ -33,7 +33,9 @@
     <!-- /.login-logo -->
     <div class="login-box-body">
         <p class="login-box-msg">Sign in to start your session</p>
-  <span style="color: red;" th:text="${msg}"></span>
+        <p style="color:red;">
+            <span th:text="${error}"></span>
+        </p>
         <form th:action="@{/dang-nhap}" method="post">
             <div class="form-group has-feedback">
                 <input type="text" name="username" class="form-control" placeholder="Username" >

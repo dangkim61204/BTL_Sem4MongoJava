@@ -1,267 +1,85 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<div th:replace="admin/layout/head :: head"></div>
+<head th:replace="admin/layout/head :: head"></head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 <body class="hold-transition skin-blue sidebar-mini">
 <div class="wrapper">
     <div th:replace="admin/layout/header :: header"></div>
     <div th:replace="admin/layout/aside :: aside"></div>
-    <!-- Content Wrapper. Contains page content -->
+
+    <!-- Content Wrapper -->
     <div class="content-wrapper">
-            <h1>Order Details</h1>
-        <div class="col-md">
-            <div class="box">
+        <section class="content">
+            <div class="container-fluid">
+                <h1>Chi tiết đơn hàng</h1>
+                <div class="box">
+                    <!-- Thông báo lỗi nếu có -->
+                    <div th:if="${error}" style="color: red;" th:text="${error}"></div>
 
-                <!-- /.box-header -->
-                <div class="box-body1" >
-                    <div    >
-                        <h2>Customer information:</h2>
-
-                        <b>Customer name:</b> <th th:text="${account.fullName}"></th>
-                        <br>
-                        <b>Email:</b><th th:text="${account.email}"></th>
-                        <br>
-                        <b>Phone:</b><th th:text="${account.phone}"></th>
-                        <br>
-                        <b>Address</b><th th:text="${account.address}"></th>
+                    <!-- Thông tin khách hàng -->
+                    <div class="box-body">
+                        <h2>Thông tin khách hàng</h2>
+                        <p><strong>Họ tên:</strong> <span th:text="${account != null ? account.fullName : 'N/A'}"></span></p>
+                        <p><strong>Email:</strong> <span th:text="${account != null ? account.email : 'N/A'}"></span></p>
+                        <p><strong>Điện thoại:</strong> <span th:text="${account != null ? account.phone : 'N/A'}"></span></p>
+                        <p><strong>Địa chỉ:</strong> <span th:text="${account != null ? account.address : 'N/A'}"></span></p>
                     </div>
-                </div>
 
-                <div class="box-body" style="text-align: center;">
-                    <div class="">
-                        <h2>Order details information:</h2>
-                        <table class="table table-bordered">
+                    <!-- Chi tiết đơn hàng -->
+                    <div class="box-body">
+                        <h2>Chi tiết sản phẩm</h2>
+                        <div th:if="${orderDetails == null or orderDetails.isEmpty()}">
+                            <p>Không có chi tiết đơn hàng.</p>
+                        </div>
+                        <table th:if="${orderDetails != null and !orderDetails.isEmpty()}" class="table table-bordered table-striped">
+                            <thead>
                             <tr>
-                                <th>Code</th>
-                                <th>Name</th>
-                                <th>Image</th>
-                                <th>Desciption</th>
-                                <th>Price</th>
-                                <th>Quantity</th>
-                                <th>Toltal</th>
-                                <th>Order date</th>
+                                <th>Mã sản phẩm</th>
+                                <th>Tên sản phẩm</th>
+                                <th>Hình ảnh</th>
+<!--                                <th>Mô tả</th>-->
+                                <th>Giá</th>
+                                <th>Số lượng</th>
+                                <th>Tổng</th>
+                                <th>Ngày đặt hàng</th>
                             </tr>
-                            <tr th:each="od:${orderDetail}">
-                                <td th:text="${od.product.code}"></td>
-                                <td th:text="${od.product.productName}"></td>
+                            </thead>
+                            <tbody>
+                            <tr th:each="od : ${orderDetails}">
+                                <td th:text="${od.orderId}"></td>
+                                <td th:text="${od.productName}"></td>
                                 <td>
-                                    <img th:src="@{'/uploads/'+ ${od.product.image}}" width="60px">
+                                    <img th:src="@{'/uploads/' + ${od.image}}" width="60" height="60" th:unless="${od.image == null}"/>
+                                    <span th:if="${od.image == null}">N/A</span>
                                 </td>
-                                <td th:utext="${od.product.desciption}"></td>
+<!--                                <td th:text="${od.description}"></td>-->
                                 <td th:text="${#numbers.formatCurrency(od.price)}"></td>
                                 <td th:text="${od.quantity}"></td>
-                                <td th:text="${#numbers.formatCurrency(od.price*od.quantity)}"></td>
-                                <td th:text="${od.order.order_date}"></td>
+                                <td th:text="${#numbers.formatCurrency(od.total)}"></td>
+                                <td th:text="${#dates.format(order.orderDate, 'dd/MM/yyyy HH:mm')}"></td>
                             </tr>
+                            </tbody>
                         </table>
-                        <td style="float: right ;">SubTotal: <span style="font-weight: bold; color: crimson;"
-                                                                   th:text="${#numbers.formatCurrency(total)}"></span></td>
+
+                        <!-- Tổng tiền -->
+                        <div style="text-align: right; margin-top: 20px;">
+                            <strong>Tổng cộng:</strong>
+                            <span style="color: crimson; font-weight: bold;" th:text="${#numbers.formatCurrency(total)}"></span>
+                        </div>
                     </div>
 
+                    <!-- Nút quay lại -->
+                    <div class="box-footer">
+                        <a href="/admin/order/list" class="btn btn-primary">Quay lại</a>
+                    </div>
                 </div>
-                <a href="/admin/order/list" class="btn btn-primary">Back</a>
             </div>
-            <!-- /.content -->
-        </div>
-        <!-- /.content-wrapper -->
-        <div></div>
-        <!-- Control Sidebar -->
-        <aside class="control-sidebar control-sidebar-dark">
-            <!-- Create the tabs -->
-            <ul class="nav nav-tabs nav-justified control-sidebar-tabs">
-                <li><a href="#control-sidebar-home-tab" data-toggle="tab"><i class="fa fa-home"></i></a></li>
-                <li><a href="#control-sidebar-settings-tab" data-toggle="tab"><i class="fa fa-gears"></i></a></li>
-            </ul>
-            <!-- Tab panes -->
-            <div class="tab-content">
-                <!-- Home tab content -->
-                <div class="tab-pane" id="control-sidebar-home-tab">
-                    <h3 class="control-sidebar-heading">Recent Activity</h3>
-                    <ul class="control-sidebar-menu">
-                        <li>
-                            <a href="javascript:void(0)">
-                                <i class="menu-icon fa fa-birthday-cake bg-red"></i>
-
-                                <div class="menu-info">
-                                    <h4 class="control-sidebar-subheading">Langdon's Birthday</h4>
-
-                                    <p>Will be 23 on April 24th</p>
-                                </div>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="javascript:void(0)">
-                                <i class="menu-icon fa fa-user bg-yellow"></i>
-
-                                <div class="menu-info">
-                                    <h4 class="control-sidebar-subheading">Frodo Updated His Profile</h4>
-
-                                    <p>New phone +1(800)555-1234</p>
-                                </div>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="javascript:void(0)">
-                                <i class="menu-icon fa fa-envelope-o bg-light-blue"></i>
-
-                                <div class="menu-info">
-                                    <h4 class="control-sidebar-subheading">Nora Joined Mailing List</h4>
-
-                                    <p>nora@example.com</p>
-                                </div>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="javascript:void(0)">
-                                <i class="menu-icon fa fa-file-code-o bg-green"></i>
-
-                                <div class="menu-info">
-                                    <h4 class="control-sidebar-subheading">Cron Job 254 Executed</h4>
-
-                                    <p>Execution time 5 seconds</p>
-                                </div>
-                            </a>
-                        </li>
-                    </ul>
-                    <!-- /.control-sidebar-menu -->
-
-                    <h3 class="control-sidebar-heading">Tasks Progress</h3>
-                    <ul class="control-sidebar-menu">
-                        <li>
-                            <a href="javascript:void(0)">
-                                <h4 class="control-sidebar-subheading">
-                                    Custom Template Design
-                                    <span class="label label-danger pull-right">70%</span>
-                                </h4>
-
-                                <div class="progress progress-xxs">
-                                    <div class="progress-bar progress-bar-danger" style="width: 70%"></div>
-                                </div>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="javascript:void(0)">
-                                <h4 class="control-sidebar-subheading">
-                                    Update Resume
-                                    <span class="label label-success pull-right">95%</span>
-                                </h4>
-
-                                <div class="progress progress-xxs">
-                                    <div class="progress-bar progress-bar-success" style="width: 95%"></div>
-                                </div>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="javascript:void(0)">
-                                <h4 class="control-sidebar-subheading">
-                                    Laravel Integration
-                                    <span class="label label-warning pull-right">50%</span>
-                                </h4>
-
-                                <div class="progress progress-xxs">
-                                    <div class="progress-bar progress-bar-warning" style="width: 50%"></div>
-                                </div>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="javascript:void(0)">
-                                <h4 class="control-sidebar-subheading">
-                                    Back End Framework
-                                    <span class="label label-primary pull-right">68%</span>
-                                </h4>
-
-                                <div class="progress progress-xxs">
-                                    <div class="progress-bar progress-bar-primary" style="width: 68%"></div>
-                                </div>
-                            </a>
-                        </li>
-                    </ul>
-                    <!-- /.control-sidebar-menu -->
-
-                </div>
-                <!-- /.tab-pane -->
-                <!-- Stats tab content -->
-                <div class="tab-pane" id="control-sidebar-stats-tab">Stats Tab Content</div>
-                <!-- /.tab-pane -->
-                <!-- Settings tab content -->
-                <div class="tab-pane" id="control-sidebar-settings-tab">
-                    <form method="post">
-                        <h3 class="control-sidebar-heading">General Settings</h3>
-
-                        <div class="form-group">
-                            <label class="control-sidebar-subheading">
-                                Report panel usage
-                                <input type="checkbox" class="pull-right" checked>
-                            </label>
-
-                            <p>
-                                Some information about this general settings option
-                            </p>
-                        </div>
-                        <!-- /.form-group -->
-
-                        <div class="form-group">
-                            <label class="control-sidebar-subheading">
-                                Allow mail redirect
-                                <input type="checkbox" class="pull-right" checked>
-                            </label>
-
-                            <p>
-                                Other sets of options are available
-                            </p>
-                        </div>
-                        <!-- /.form-group -->
-
-                        <div class="form-group">
-                            <label class="control-sidebar-subheading">
-                                Expose author name in posts
-                                <input type="checkbox" class="pull-right" checked>
-                            </label>
-
-                            <p>
-                                Allow the user to show his name in blog posts
-                            </p>
-                        </div>
-                        <!-- /.form-group -->
-
-                        <h3 class="control-sidebar-heading">Chat Settings</h3>
-
-                        <div class="form-group">
-                            <label class="control-sidebar-subheading">
-                                Show me as online
-                                <input type="checkbox" class="pull-right" checked>
-                            </label>
-                        </div>
-                        <!-- /.form-group -->
-
-                        <div class="form-group">
-                            <label class="control-sidebar-subheading">
-                                Turn off notifications
-                                <input type="checkbox" class="pull-right">
-                            </label>
-                        </div>
-                        <!-- /.form-group -->
-
-                        <div class="form-group">
-                            <label class="control-sidebar-subheading">
-                                Delete chat history
-                                <a href="javascript:void(0)" class="text-red pull-right"><i
-                                        class="fa fa-trash-o"></i></a>
-                            </label>
-                        </div>
-                        <!-- /.form-group -->
-                    </form>
-                </div>
-                <!-- /.tab-pane -->
-            </div>
-        </aside>
-        <!-- /.control-sidebar -->
-        <!-- Add the sidebar's background. This div must be placed
-             immediately after the control sidebar -->
-        <div th:replace="admin/layout/footer :: footer"></div>
+        </section>
     </div>
-    <!-- ./wrapper -->
+
+    <!-- Footer & Script -->
+    <div th:replace="admin/layout/footer :: footer"></div>
+    <div th:replace="admin/layout/script :: script"></div>
 </div>
-<div th:replace="admin/layout/script :: script"></div>
 </body>
 </html>

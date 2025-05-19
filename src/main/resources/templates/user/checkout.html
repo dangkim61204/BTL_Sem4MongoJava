@@ -166,7 +166,7 @@
                                     <tr>
                                         <th>Subtotal</th>
                                         <td>
-                                            <span th:text="${#numbers.formatCurrency(total)}"></span>
+                                            <span style="color: crimson; font-weight: bold;" th:text="${#numbers.formatCurrency(total)}"></span>
                                         </td>
                                     </tr>
                                     </tfoot>
@@ -186,35 +186,35 @@
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="js-form-message mb-6">
-                                    <label class="form-label">email <span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control" name="email" th:value="${session.email}"
-                                           placeholder="email" required>
+                                    <label class="form-label">Username <span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control" name="username" th:value="${username}"
+                                           placeholder="Username" required>
                                 </div>
                             </div>
 
-<!--                            <div class="col-md-12">-->
-<!--                                <div class="js-form-message mb-6">-->
-<!--                                    <label class="form-label">Email address <span class="text-danger">*</span></label>-->
-<!--                                    <input type="email" class="form-control" name="email" th:field="*{email}"-->
-<!--                                           placeholder="admin@gmail.com" required>-->
-<!--                                </div>-->
-<!--                            </div>-->
+                            <div class="col-md-12">
+                                <div class="js-form-message mb-6">
+                                    <label class="form-label">Email address <span class="text-danger">*</span></label>
+                                    <input type="email" class="form-control" name="email" th:value="${email}"
+                                           placeholder="admin@gmail.com" required>
+                                </div>
+                            </div>
 
-<!--                            <div class="col-md-12">-->
-<!--                                <div class="js-form-message mb-6">-->
-<!--                                    <label class="form-label">Phone</label>-->
-<!--                                    <input type="text" class="form-control" th:field="*{phone}"-->
-<!--                                           placeholder="+84 xxx">-->
-<!--                                </div>-->
-<!--                            </div>-->
+                            <div class="col-md-12">
+                                <div class="js-form-message mb-6">
+                                    <label class="form-label">Phone</label>
+                                    <input type="text" class="form-control" name="phone" th:value="${phone}"
+                                           placeholder="+84 xxx">
+                                </div>
+                            </div>
 
-<!--                            <div class="col-md-12">-->
-<!--                                <div class="js-form-message mb-6">-->
-<!--                                    <label class="form-label">Street address <span class="text-danger">*</span></label>-->
-<!--                                    <input type="text" class="form-control" th:field="*{address}"-->
-<!--                                           placeholder="address" required>-->
-<!--                                </div>-->
-<!--                            </div>-->
+                            <div class="col-md-12">
+                                <div class="js-form-message mb-6">
+                                    <label class="form-label">Street address <span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control"  name="address" th:value="${address}"
+                                           placeholder="address" required>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>

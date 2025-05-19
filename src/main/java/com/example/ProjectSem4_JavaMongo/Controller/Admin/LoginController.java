@@ -20,7 +20,10 @@ import java.util.Collection;
 
 public class LoginController {
     @GetMapping("/admin")
-    public String index(){
+    public String index(Model model){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String name = authentication.getName();
+        model.addAttribute("name", name);
         return "admin/index";
     }
 

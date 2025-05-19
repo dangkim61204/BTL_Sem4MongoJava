@@ -79,7 +79,7 @@ public class RegisterPageController {
         session.setAttribute("account", savedAccount);
 
         model.addAttribute("msgt", "Đăng ký thành công. Vui lòng đăng nhập.");
-        return "/user/login";
+        return "redirect:/dang-nhap";
     }
 
 }
