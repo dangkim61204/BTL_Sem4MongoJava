@@ -15,4 +15,5 @@ public interface AccountService {
     List<Account> searchAccount(String key);
     Page<Account> getAll(Integer pageNo);
     Page<Account>  searchAccount(String key, Integer pageNo);
+    Account save(Account account);
 }

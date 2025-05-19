@@ -22,6 +22,8 @@ public class SercurityConfig {
     public SercurityConfig(AccountDetailService accountDetailService) {
         this.accountDetailService = accountDetailService;
     }
+    @Autowired
+    private CustomAuthenticationSuccessHandler customAuthenticationSuccessHandler;
 
     @Bean
     BCryptPasswordEncoder passwordEncoder() {
@@ -44,7 +46,7 @@ public class SercurityConfig {
                             .loginProcessingUrl("/login") // URL xử lý đăng nhập
                             .usernameParameter("username")
                             .passwordParameter("password")
-                            .defaultSuccessUrl("/admin", true) // Chuyển hướng đến /admin sau khi đăng nhập
+                            .successHandler(customAuthenticationSuccessHandler)
                             .failureUrl("/login?error=true") // Đăng nhập thất bại
                             .permitAll()
                     )

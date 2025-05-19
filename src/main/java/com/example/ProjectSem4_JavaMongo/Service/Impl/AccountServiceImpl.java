@@ -73,4 +73,8 @@ public class AccountServiceImpl implements AccountService {
 
         return new PageImpl<Account>(list, pageable, this.searchAccount(key).size());
     }
+    @Override
+    public Account save(Account account) {
+        return accountRepository.save(account);
+    }
 }

@@ -6,14 +6,19 @@ import com.example.ProjectSem4_JavaMongo.Service.AccountService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+
+import java.util.Collection;
 
 @Controller
 public class LoginPageController {
@@ -22,41 +27,40 @@ public class LoginPageController {
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
 
-    @RequestMapping("/dang-nhap")
-    public String logiUser(Model model){
-        return "/user/login";
-    }
-    //đăng nhập trang người dùng
-    @PostMapping("/dang-nhap")
-    public String dang_nhap( String password, String username,Model model, HttpServletRequest req){
+    @GetMapping("/dang-nhap")
+    public String loginUser(HttpServletRequest request, Model model) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-        System.out.println("Username nhập: " + username);
-        Account acc = this.accountService.findByUserName(username);
-        System.out.println("Tìm thấy: " + acc);
-        if (acc != null) {
-            System.out.println("Mật khẩu mã hóa: " + acc.getPassword());
-            System.out.println("So khớp: " + passwordEncoder.matches(password, acc.getPassword()));
+        // Nếu đã đăng nhập thì chuyển hướng theo vai trò
+        if (!(authentication instanceof AnonymousAuthenticationToken)) {
+            String username = authentication.getName();
+            Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
+
+            boolean isUser = authorities.stream().anyMatch(auth -> auth.getAuthority().equals("USER"));
+            boolean isAdmin = authorities.stream().anyMatch(auth -> auth.getAuthority().equals("ADMIN"));
+
+            if (isAdmin) {
+                return "redirect:/admin/index";
+            } else if (isUser) {
+                return "redirect:/user/home";
+            }
         }
-        HttpSession session = req.getSession();
-        session.setMaxInactiveInterval(3600);
-//        String uuidString = UUID.randomUUID().toString();
-        session.setAttribute("account_id", acc.getAccountId());
-        session.setAttribute("fullname", acc.getFullName());
-        session.setAttribute("email", acc.getEmail());
-        session.setAttribute("username", acc.getUserName());
-        session.setAttribute("phone", acc.getPhone());
-        session.setAttribute("address", acc.getAddress());
 
-        return "redirect:/";
+        // Nếu login sai
+        if (request.getParameter("error") != null) {
+            model.addAttribute("error", "Tài khoản hoặc mật khẩu không đúng.");
+        }
+
+        // Nếu logout
+        if (request.getParameter("logout") != null) {
+            model.addAttribute("msg", "Bạn đã đăng xuất thành công.");
+        }
+
+        // Nếu bị từ chối truy cập
+        if (request.getParameter("accessDenied") != null) {
+            model.addAttribute("error", "Bạn không có quyền truy cập.");
+        }
+
+        return "user/login";
     }
-
-
-    //GET: thoat trang user
-    @RequestMapping(value = "thoat")
-    public String logout(Model model, HttpServletRequest req) {
-        HttpSession session = req.getSession();
-        session.invalidate();
-        return "redirect:/";
-    }
-
 }

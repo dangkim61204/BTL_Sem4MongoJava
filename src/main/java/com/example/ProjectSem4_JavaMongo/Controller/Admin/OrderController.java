@@ -21,12 +21,12 @@ import java.util.List;
 public class OrderController {
     @Autowired
     private OrderRepository orderRepository;
-    @GetMapping("/order/dat-hang")
-    public  String viewOrder(Model model){
-//        model.addAttribute("order" , "dat hang thanh cong");
-
-        return "/user/home";
-    }
+//    @GetMapping("/order/dat-hang")
+//    public  String viewOrder(Model model){
+////        model.addAttribute("order" , "dat hang thanh cong");
+//
+//        return "/user/home";
+//    }
     @PostMapping("/order/dat-hang")
     public String datHang(@ModelAttribute("order") Order order,
                           HttpServletRequest request,

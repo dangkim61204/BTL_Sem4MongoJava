@@ -119,8 +119,11 @@
             </div>
             <!-- End Card -->
         </div>
+        <div th:if="${param.success}" class="alert alert-success mt-3">
+            Cập nhật thông tin thành công!
+        </div>
         <!-- End Accordion -->
-        <form class="js-validate" novalidate="novalidate" th:action="@{/order/dat-hang}" th:object="${order}" method="post">
+        <form class="js-validate" novalidate="novalidate" th:action="@{/order/dat-hang}" method="post">
             <div class="row">
                 <!-- Hiển thị thông báo -->
                 <div th:if="${success}" class="alert alert-success" th:text="${success}"></div>
@@ -183,35 +186,35 @@
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="js-form-message mb-6">
-                                    <label class="form-label">FullName <span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control" th:field="*{fullname}"
-                                           placeholder="FullName" required>
+                                    <label class="form-label">email <span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control" name="email" th:value="${session.email}"
+                                           placeholder="email" required>
                                 </div>
                             </div>
 
-                            <div class="col-md-12">
-                                <div class="js-form-message mb-6">
-                                    <label class="form-label">Email address <span class="text-danger">*</span></label>
-                                    <input type="email" class="form-control" th:field="*{email}"
-                                           placeholder="admin@gmail.com" required>
-                                </div>
-                            </div>
+<!--                            <div class="col-md-12">-->
+<!--                                <div class="js-form-message mb-6">-->
+<!--                                    <label class="form-label">Email address <span class="text-danger">*</span></label>-->
+<!--                                    <input type="email" class="form-control" name="email" th:field="*{email}"-->
+<!--                                           placeholder="admin@gmail.com" required>-->
+<!--                                </div>-->
+<!--                            </div>-->
 
-                            <div class="col-md-12">
-                                <div class="js-form-message mb-6">
-                                    <label class="form-label">Phone</label>
-                                    <input type="text" class="form-control" th:field="*{phone}"
-                                           placeholder="+84 xxx">
-                                </div>
-                            </div>
+<!--                            <div class="col-md-12">-->
+<!--                                <div class="js-form-message mb-6">-->
+<!--                                    <label class="form-label">Phone</label>-->
+<!--                                    <input type="text" class="form-control" th:field="*{phone}"-->
+<!--                                           placeholder="+84 xxx">-->
+<!--                                </div>-->
+<!--                            </div>-->
 
-                            <div class="col-md-12">
-                                <div class="js-form-message mb-6">
-                                    <label class="form-label">Street address <span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control" th:field="*{address}"
-                                           placeholder="address" required>
-                                </div>
-                            </div>
+<!--                            <div class="col-md-12">-->
+<!--                                <div class="js-form-message mb-6">-->
+<!--                                    <label class="form-label">Street address <span class="text-danger">*</span></label>-->
+<!--                                    <input type="text" class="form-control" th:field="*{address}"-->
+<!--                                           placeholder="address" required>-->
+<!--                                </div>-->
+<!--                            </div>-->
                         </div>
                     </div>
                 </div>
